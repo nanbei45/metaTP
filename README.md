@@ -20,7 +20,7 @@ Dry run: Use --dry-run to see what tasks Snakemake will perform without actually
 ```Python 
 snakemake --dry-run
 ```
-Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
+
 ```Python
 snakemake -j 4 
 ```
@@ -115,7 +115,11 @@ snakemake up_regulated_gene
 ```
 input:./test_sra_data/DEG_result0.05、/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta <br>
 output:differential_genes_id_down.txt、differential_gene_sequence_down.fasta、differential_gene_sequence_down.pep.<br>
-(3)snakemake down_regulated_gen
+(3)This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.
+Run the following commands to perform downstream analyses such as gene function annotation, enrichment analysis, and structure prediction.<br>
+```Bash
+snakemake down_regulated_gen
+```
 input:./test_sra_data/DEG_result0.05<br>
 output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
 #### 7. emapper.py

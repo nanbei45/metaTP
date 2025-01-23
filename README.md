@@ -94,7 +94,7 @@ snakemake DEG_analysis
 snakemake up_regulated_gene
 snakemake down_regulated_gen
 ```
-(1)
+(1)<br>
 a.Call the R script DEG_analysis.r to perform differential gene analysis:the output is the differentially expressed genes result file differential_genes.csv: contains gene ID, logFC, P value and gene expression change status (such as upregulation Up, downregulation Down)<br>
 b.Filter up-regulated or down-regulated genes from the differential_genes.csv file and generate the gene ID file differential_genes_id.txt.<br>
 c.Use the seqkit tool to extract the DNA sequences of differentially expressed genes from the input gene sequence file (FASTA format).<br>
@@ -105,9 +105,16 @@ snakemake DEG_analysis
 ```
 input:./test_sra_data/transcripts_quant/transcript_abundance_quantification_table_filter.csv<br>
 output:./test_sra_data/DEG_result0.05<br>
-(2)snakemake up_regulated_gene
-input:./test_sra_data/DEG_result0.05<br>
-output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta <br>
+(2)
+a.Screening down-regulated genes: Extracting related gene IDs based on expression change status (Down).<br>
+b.Extract gene sequence: Extract DNA sequence from sequence file based on gene ID.The output is differential_genes_id_down.txt: a list of IDs of downregulated genes.The output is differential_gene_sequence_down.fasta: the DNA sequence of the downregulated gene.<br>
+c.Translate protein sequence: The DNA sequence of the downregulated gene is translated into protein sequence.The output is differential_gene_sequence_down.pep: the protein sequence of the downregulated gene.<br>
+Run the following commands to perform downstream analyses such as gene function annotation, enrichment analysis, and structure prediction.<br>
+```Bash
+snakemake up_regulated_gene
+```
+input:./test_sra_data/DEG_result0.05、/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta <br>
+output:differential_genes_id_down.txt、differential_gene_sequence_down.fasta、differential_gene_sequence_down.pep.<br>
 (3)snakemake down_regulated_gen
 input:./test_sra_data/DEG_result0.05<br>
 output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>

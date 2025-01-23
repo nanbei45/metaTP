@@ -39,7 +39,18 @@ snakemake QC_test
 input: ./test_sra_data/fastq<br>
 output: ./test_sra_data/QC_before_result<br>
 #### 3. Sequence quality control, rmrRNA contig cds
-Process poor quality or technically poor sequences using Trimmomatic, import the quality trimmed fastq files into bowtie2 to remove rRNA, assemble further using megahit, and identify putative coding regions from assembled transcripts and/or contigs using Transdecoder.<br>
+（1）Quality control (QC_control):<br>
+• Trim the FASTQ file using Trimmomatic, including removing adapters, low-quality sequences, and short sequences.<br>
+• Distinguish between single-end sequencing data (SE) and paired-end sequencing data (PE), and call different trimming commands for each.<br>
+（2）rRNA removal (rmrRNA):<br>
+• Use Bowtie2 to remove rRNA sequences and retain non-rRNA reads.<br>
+（3）Transcript assembly (to_contigs):<br>
+• Use megahit to assemble non-rRNA reads to generate transcript groups.<br>
+（4）Coding region prediction (contigs_change_id):<br>
+• Use TransDecoder to predict the coding region (CDS) in the transcript, and modify the ID of the assembly result.<br>
+（5）De-redundancy (rmdup):<br>
+• Use the seqkit tool to deduplicate the predicted coding region sequence, and finally generate a file without redundant sequences<br>
+Run the following command to complete the above process.<br>
 ```Python
 snakemake QC_rmrRNA_contigs_cds
 ```

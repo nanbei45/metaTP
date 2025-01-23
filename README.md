@@ -3,5 +3,7 @@ metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that in
 ## Prerequisites
 Configure the environment through yaml files
 ```Python
+git clone https://github.com/nanbei45/metaTP.git
+cd metaTP/
 conda env create -f metaTP.yaml
 ```

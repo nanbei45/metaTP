@@ -16,21 +16,25 @@ conda activate metaTP
 pip install snakemake
 ```
 ## Execute
+Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
+```Python 
+snakemake --dry-run
+```
+Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
 ```Python
-snakemake -j 4  #Use the -j parameter to set the number of tasks to execute in parallel. For example, to use 4 parallel tasks:
-snakemake --dry-run #Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
+snakemake -j 4 
 ```
 ### 1. Download the sra sequence according to the ACC number
 ```Python
-
+snakemake prefetch_sra2fastq
 ```
 ### 2. Sequence quality test
 ```Python
-
+snakemake snakemake QC_test
 ```
 ### 3. Sequence quality control, rmrRNA contig cds
 ```Python
-
+QC_rmrRNA_contigs_cds
 ```
 ### 4. transcript_index
 ```Python

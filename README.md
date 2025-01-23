@@ -15,3 +15,31 @@ Install snakemake
 conda activate metaTP
 pip install snakemake
 ```
+##1. Download the sra sequence according to the ACC number
+```Python
+
+```
+##2. Sequence quality test
+```Python
+
+```
+##3. Sequence quality control, rmrRNA contig cds
+```Python
+
+```
+##4. transcript_index
+```Python
+
+```
+##5. gene_expression_quant
+```Python
+
+```
+##6. DEG_analysis
+```Python
+
+```
+##7. emapper.py
+```Python
+
+```

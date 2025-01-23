@@ -55,3 +55,15 @@ snakemake down_regulated_gen
 snakemake emapper
 ```
 ## Analyze
+#### 1. Downstream analysis.R
+```Python
+  Dimensionality reduction analysis
+  Venn analysis
+  Functinal annotation
+  Functional enrichment analysis
+```
+
+#### 1. Gene co-expression network
+```Python
+  all codes in Gene_co-expression_network.zip
+```

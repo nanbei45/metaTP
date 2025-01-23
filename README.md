@@ -105,7 +105,7 @@ snakemake DEG_analysis
 ```
 input:./test_sra_data/transcripts_quant/transcript_abundance_quantification_table_filter.csv<br>
 output:./test_sra_data/DEG_result0.05<br>
-(2)
+(2)<br>
 a.Screening down-regulated genes: Extracting related gene IDs based on expression change status (Down).<br>
 b.Extract gene sequence: Extract DNA sequence from sequence file based on gene ID.The output is differential_genes_id_down.txt: a list of IDs of downregulated genes.The output is differential_gene_sequence_down.fasta: the DNA sequence of the downregulated gene.<br>
 c.Translate protein sequence: The DNA sequence of the downregulated gene is translated into protein sequence.The output is differential_gene_sequence_down.pep: the protein sequence of the downregulated gene.<br>
@@ -115,7 +115,7 @@ snakemake up_regulated_gene
 ```
 input:./test_sra_data/DEG_result0.05、/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta <br>
 output:differential_genes_id_down.txt、differential_gene_sequence_down.fasta、differential_gene_sequence_down.pep.<br>
-(3)This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.
+(3)This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.<br>
 Run the following commands to perform downstream analyses such as gene function annotation, enrichment analysis, and structure prediction.<br>
 ```Bash
 snakemake down_regulated_gen
@@ -123,7 +123,7 @@ snakemake down_regulated_gen
 input:./test_sra_data/DEG_result0.05<br>
 output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
 #### 7. emapper.py
-The integrated eggNOG -mapper provides several key features including: 1) de novo gene prediction based on raw alignments, 2) integrated pairwise homology prediction, and 3) rapid protein domain detection.
+The integrated eggNOG -mapper provides several key features including: 1) de novo gene prediction based on raw alignments, 2) integrated pairwise homology prediction, and 3) rapid protein domain detection.<br>
 ```Python
 snakemake emapper
 ```

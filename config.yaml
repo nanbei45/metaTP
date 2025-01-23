@@ -1,0 +1,5 @@
+threads: 24
+phred: "-phred33"
+adapter_path: "trimmomatic_adapters/TruSeq3"
+quality_cutoff: "4:15"
+min_len: 25

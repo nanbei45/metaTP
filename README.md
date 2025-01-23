@@ -24,32 +24,34 @@ Dry run: Use --dry-run to see what tasks Snakemake will perform without actually
 ```Python
 snakemake -j 4 
 ```
-### 1. Download the sra sequence according to the ACC number
+#### 1. Download the sra sequence according to the ACC number
 ```Python
 snakemake prefetch_sra2fastq
 ```
-### 2. Sequence quality test
+#### 2. Sequence quality test
 ```Python
-snakemake snakemake QC_test
+snakemake QC_test
 ```
-### 3. Sequence quality control, rmrRNA contig cds
+#### 3. Sequence quality control, rmrRNA contig cds
 ```Python
-QC_rmrRNA_contigs_cds
+snakemake QC_rmrRNA_contigs_cds
 ```
-### 4. transcript_index
+#### 4. transcript_index
 ```Python
-
+snakemake transcript_index
 ```
-### 5. gene_expression_quant
+#### 5. gene_expression_quant
 ```Python
-
+snakemake gene_expression_quant
 ```
-### 6. DEG_analysis
+#### 6. DEG_analysis
 ```Python
-
+snakemake DEG_analysis
+snakemake up_regulated_gene
+snakemake down_regulated_gen
 ```
-### 7. emapper.py
+#### 7. emapper.py
 ```Python
-
+snakemake emapper
 ```
 ## Analyze

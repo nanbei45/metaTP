@@ -28,32 +28,69 @@ snakemake -j 4
 ```Python
 snakemake prefetch_sra2fastq
 ```
+input: SRR_Acc_List.txt
+output: ./test_sra_data/fastq
 #### 2. Sequence quality test
 ```Python
 snakemake QC_test
 ```
+input: ./test_sra_data/fastq
+output: ./test_sra_data/QC_before_result
 #### 3. Sequence quality control, rmrRNA contig cds
 ```Python
 snakemake QC_rmrRNA_contigs_cds
 ```
+input: ./test_sra_data/fastq
+output: ./test_sra_data/QC_control;./test_sra_data/rmrRNA;./test_sra_data/magahit;
 #### 4. transcript_index
 ```Python
 snakemake transcript_index
 ```
+input: ./test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta
+output: ./test_sra_data/transcripts_index
+
 #### 5. gene_expression_quant
 ```Python
 snakemake gene_expression_quant
 ```
+input: ./test_sra_data/rmrRNA、./test_sra_data/transcripts_index
+output: ./test_sra_data/transcripts_quant/transcript_abundance_quantification_table.csv
+```bash
+     library("tidyverse")
+     table_filter<- read.csv("transcript_abundance_quantification_table_filter.csv",header=T,row.names=1)
+     S_id <- read.csv("Streptophyta_id.csv",header=F,row.names = 1)
+     rownames(S_id)
+
+     table_filter2<- table_filter[-which(rownames(table_filter) %in% rownames(S_id)),]
+     #table_filter2<- table_filter %>% filter(rownames(table_filter) %in% rownames(S_id))
+     nrow(table_filter2)
+     nrow(table_filter)
+     nrow(S_id)
+     write.csv(data.frame(GeneID=rownames(table_filter2),table_filter2),"transcript_abundance_quantification_table_filter2.csv",row.names=F)
+```
+input:transcript_abundance_quantification_table_filter.csv
+output:transcript_abundance_quantification_table_filter2.csv
 #### 6. DEG_analysis
 ```Python
 snakemake DEG_analysis
 snakemake up_regulated_gene
 snakemake down_regulated_gen
 ```
+(1)snakemake DEG_analysis
+input:./test_sra_data/transcripts_quant/transcript_abundance_quantification_table_filter.csv
+output:./test_sra_data/DEG_result0.05
+(2)snakemake up_regulated_gene
+input:./test_sra_data/DEG_result0.05
+output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta 
+(3)snakemake down_regulated_gen
+input:./test_sra_data/DEG_result0.05
+output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta
 #### 7. emapper.py
 ```Python
 snakemake emapper
 ```
+input:./test_sra_data/DEG_result0.05/differential_gene_sequence_up.fasta
+output:./test_sra_data/differential_gene_sequence_up
 ## Analyze
 We use 8 ontologies and rhizosphere metatranscriptome samples from Mendes et al. as examples for case analysis. The following are the specific steps and input and output of the analysis:
 #### 1. Downstream analysis.R

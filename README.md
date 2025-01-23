@@ -65,10 +65,10 @@ Run the script directly using the R language command:
 input: <br>
 	•transcript_abundance_quantification_table_filter2.csv:Transcript abundance table containing expression values ​​for each sample.<br>
 output:<br>
-	•降维后的数据可视化结果，主坐标分析（PCoA）图，显示根际样品和不同剂量的本体样品之间存在显著分离，表明在不同土壤环境中存在显著的转录差异。<br>
+	•The data visualization results after dimensionality reduction, principal coordinate analysis (PCoA) plot, showed significant separation between rhizosphere samples and bulk samples at different doses, indicating significant transcriptional differences in different soil environments.<br>
 (2)Venn analysis<br>
 input:<br>
-	•venn_setdiff_rhi.emapper.annotations.csv：通过eggNOG注释的基因功能数据，包括基因ID及其功能分类信息。<br>
+	•venn_setdiff_rhi.emapper.annotations.csv：Gene function data annotated by eggNOG, including gene ID and its functional classification information.<br>
 output:<br>
 	•venn_setdiff_bulk_go.pdf：展示本体样本和根际样本共享和特有基因的维恩图。<br>
 (3)Functional Annotation <br>

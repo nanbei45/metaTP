@@ -167,6 +167,14 @@ output：<br>
 
 
 #### 1. Gene co-expression network
+This flow describes the construction process of the gene co-expression network.
+（1）Correlation analysis: remove classification information and keep ID (1,1) as the name of the sample and species. Samples are used as rows and species are used as columns. Use the Python script correlation_analysis.py to analyze the correlation.
+（2）RMT screening: filter out significant correlation data, extract important structural information, and output an RMT_result.csv file.
+（3）Adjacency matrix construction: use the significant correlation matrix to construct the adjacency matrix adjacency_matrx.csv of the gene co-expression network.
+（4）Meta network analysis: analyze the network connections between different species at different levels and generate a Meta network.
+（5）Subnetwork analysis: analyze the network structure of different samples and groups, extract topological structure features, and generate network information corresponding to each sample.
+（6）Subnetwork analysis of each group: analyze the subnetwork structure corresponding to each group (such as different altitudes, different species, etc.) and draw the network of each group.
+Execute the following command to complete the overall process analysis of the gene co-expression network：
 ```Python
   all codes in Gene_co-expression_network.zip
 ```

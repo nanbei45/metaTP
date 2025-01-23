@@ -55,13 +55,41 @@ snakemake down_regulated_gen
 snakemake emapper
 ```
 ## Analyze
+我们使用来自Mendes等人的研究8个本体和根际宏转录组样本为例进行案例分析，以下是分析的具体步骤和输入输出：
 #### 1. Downstream analysis.R
+使用R语言命令直接运行脚本，将得倒：
 ```Python
-  Dimensionality reduction analysis
-  Venn analysis
-  Functinal annotation
-  Functional enrichment analysis
+ Rscript downstream_analysis.R
 ```
+(1)Dimensionality Reduction Analysis
+input: 
+	•	transcript_abundance_quantification_table_filter2.csv:转录本丰度表，包含每个样本的表达值。
+output:
+	•	降维后的数据可视化结果，主坐标分析（PCoA）图，显示根际样品和不同剂量的本体样品之间存在显著分离，表明在不同土壤环境中存在显著的转录差异。
+(2)Venn analysis
+input:
+	•	venn_setdiff_rhi.emapper.annotations.csv：通过eggNOG注释的基因功能数据，包括基因ID及其功能分类信息。
+output:
+	•	venn_setdiff_bulk_go.pdf：展示本体样本和根际样本共享和特有基因的维恩图。
+(3)Functional Annotation
+input：
+	•	final_table_sequence.emapper.annotations.csv：从eggNOG注释工具生成的功能注释表，包含基因ID、功能分类、GO注释、KEGG路径等。
+	•	cog_funclass.tab：COG功能分类表，定义了各COG分类的含义。
+output：
+	•	cog.pdf：COG功能分类的柱状图，显示每个功能类别中包含的基因数量。
+	•	功能注释的中间结果表（如gene2cog），记录了基因到COG功能的映射。
+ (4)Functional Enrichment Analysis
+ input：
+	•	differential_genes_id_up.txt：差异表达基因的ID列表。
+	•	go_term.list：GO术语表，定义每个GO术语的功能和分类。
+	•	final_table_sequence.emapper.annotations.csv：基因的GO注释数据。
+	•	ko00001.json：从KEGG下载的路径注释信息（用于KO富集分析）。
+output：
+	•	go_rich.txt：GO功能富集分析结果表，记录了显著GO分类及对应基因数。
+	•	go_rich_bar.pdf 和 go_rich_dot.pdf：GO功能富集的柱状图和点图。
+	•	Ko_rich.txt：KEGG功能富集结果表，记录了显著的KEGG路径及对应基因。
+	•	ko_rich_bar.pdf 和 ko_rich_dot.pdf：KEGG功能富集的柱状图和点图。
+
 
 #### 1. Gene co-expression network
 ```Python

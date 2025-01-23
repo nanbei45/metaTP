@@ -70,25 +70,25 @@ output:<br>
 input:<br>
 	•venn_setdiff_rhi.emapper.annotations.csv：Gene function data annotated by eggNOG, including gene ID and its functional classification information.<br>
 output:<br>
-	•venn_setdiff_bulk_go.pdf：展示本体样本和根际样本共享和特有基因的维恩图。<br>
+	•venn_setdiff_bulk_go.pdf：Venn diagram showing the shared and unique genes between the rhizosphere and rhizosphere samples<br>
 (3)Functional Annotation <br>
 input：<br>
-	•final_table_sequence.emapper.annotations.csv：从eggNOG注释工具生成的功能注释表，包含基因ID、功能分类、GO注释、KEGG路径等。<br>
-	•cog_funclass.tab：COG功能分类表，定义了各COG分类的含义。<br>
+	•final_table_sequence.emapper.annotations.csv：Functional annotation table generated from the eggNOG annotation tool, including gene ID, functional classification, GO annotation, KEGG pathway, etc.<br>
+	•cog_funclass.tab：The COG functional classification table defines the meaning of each COG classification.<br>
 output：<br>
-	•cog.pdf：COG功能分类的柱状图，显示每个功能类别中包含的基因数量。<br>
-	•功能注释的中间结果表（如gene2cog），记录了基因到COG功能的映射。<br>
+	•cog.pdf：Histogram of COG functional categories showing the number of genes included in each functional category.<br>
+	•Intermediate result table of functional annotation（such as gene2cog），Mapping of genes to COG functions is documented.<br>
  (4)Functional Enrichment Analysis<br>
  input：<br>
-	•differential_genes_id_up.txt：差异表达基因的ID列表。<br>
-	•go_term.list：GO术语表，定义每个GO术语的功能和分类。<br>
-	•final_table_sequence.emapper.annotations.csv：基因的GO注释数据。<br>
-	•ko00001.json：从KEGG下载的路径注释信息（用于KO富集分析）。<br>
+	•differential_genes_id_up.txt：A list of differentially expressed gene IDs.<br>
+	•go_term.list：GO glossary, defining the function and classification of each GO term.<br>
+	•final_table_sequence.emapper.annotations.csv：GO annotation data of genes.<br>
+	•ko00001.json：Pathway annotation information downloaded from KEGG (for KO enrichment analysis).<br>
 output：<br>
-	•go_rich.txt：GO功能富集分析结果表，记录了显著GO分类及对应基因数。<br>
-	•go_rich_bar.pdf 和 go_rich_dot.pdf：GO功能富集的柱状图和点图。<br>
-	•Ko_rich.txt：KEGG功能富集结果表，记录了显著的KEGG路径及对应基因。<br>
-	•ko_rich_bar.pdf 和 ko_rich_dot.pdf：KEGG功能富集的柱状图和点图。<br>
+	•go_rich.txt：The GO functional enrichment analysis result table records the significant GO classifications and the corresponding gene numbers.<br>
+	•go_rich_bar.pdf and go_rich_dot.pdf：Bar graph and dot plot of GO functional enrichment.<br>
+	•Ko_rich.txt：The KEGG functional enrichment result table records the significant KEGG pathways and corresponding genes.<br>
+	•ko_rich_bar.pdf and ko_rich_dot.pdf：Bar graph and dot plot of KEGG functional enrichment.<br>
 
 
 #### 1. Gene co-expression network

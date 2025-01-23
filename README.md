@@ -25,24 +25,28 @@ Dry run: Use --dry-run to see what tasks Snakemake will perform without actually
 snakemake -j 4 
 ```
 #### 1. Download the sra sequence according to the ACC number
-```Python
+The metaTP pipeline integrates data download options using the SRA toolkit.
+```Bash
 snakemake prefetch_sra2fastq
 ```
-input: SRR_Acc_List.txt
-output: ./test_sra_data/fastq
+input: SRR_Acc_List.txt<br>
+output: ./test_sra_data/fastq<br>
 #### 2. Sequence quality test
+Assess the quality of FASTQ files using FastQC.<br>
 ```Python
 snakemake QC_test
 ```
 input: ./test_sra_data/fastq<br>
 output: ./test_sra_data/QC_before_result<br>
 #### 3. Sequence quality control, rmrRNA contig cds
+Process poor quality or technically poor sequences using Trimmomatic, import the quality trimmed fastq files into bowtie2 to remove rRNA, assemble further using megahit, and identify putative coding regions from assembled transcripts and/or contigs using Transdecoder.<br>
 ```Python
 snakemake QC_rmrRNA_contigs_cds
 ```
 input: ./test_sra_data/fastq<br>
 output: ./test_sra_data/QC_control;./test_sra_data/rmrRNA;./test_sra_data/magahit;<br>
 #### 4. transcript_index
+Coding sequences obtained from Transdecoder were used to build the index, create a decoy-aware transcriptome file for Salmon transcript quantification, and then create a transcriptome index. Gene expression levels were normalized to transcript length and library size (TPM).
 ```Python
 snakemake transcript_index
 ```
@@ -86,6 +90,7 @@ output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fast
 input:./test_sra_data/DEG_result0.05<br>
 output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
 #### 7. emapper.py
+The integrated eggNOG -mapper provides several key features including: 1) de novo gene prediction based on raw alignments, 2) integrated pairwise homology prediction, and 3) rapid protein domain detection.
 ```Python
 snakemake emapper
 ```

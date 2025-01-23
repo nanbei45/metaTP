@@ -57,14 +57,16 @@ snakemake QC_rmrRNA_contigs_cds
 input: ./test_sra_data/fastq<br>
 output: ./test_sra_data/QC_control;./test_sra_data/rmrRNA;./test_sra_data/magahit;<br>
 #### 4. transcript_index
-Coding sequences obtained from Transdecoder were used to build the index, create a decoy-aware transcriptome file for Salmon transcript quantification, and then create a transcriptome index. Gene expression levels were normalized to transcript length and library size (TPM).
+This is a function for creating transcript indexes, which mainly relies on the salmon tool. Its function is to generate index files for transcript sequences (FASTA format) in RNA-Seq data for subsequent quantitative expression analysis.The output folder will contain the Salmon index files<br>
+Run the following command to complete the function.<br>
 ```Python
 snakemake transcript_index
 ```
 input: ./test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
-output: ./test_sra_data/transcripts_index<br>
+output: ./test_sra_data/transcripts_index.<br>
 
 #### 5. gene_expression_quant
+This process is to filter out low-expression genes by checking the expression values ​​of each group of samples in the gene expression data table, eliminating genes with low expression levels in the samples, and retaining genes with a certain expression level.<br>
 ```Python
 snakemake gene_expression_quant
 ```
@@ -86,12 +88,21 @@ output: ./test_sra_data/transcripts_quant/transcript_abundance_quantification_ta
 input:transcript_abundance_quantification_table_filter.csv<br>
 output:transcript_abundance_quantification_table_filter2.csv<br>
 #### 6. DEG_analysis
+
 ```Python
 snakemake DEG_analysis
 snakemake up_regulated_gene
 snakemake down_regulated_gen
 ```
-(1)snakemake DEG_analysis
+(1)
+a.Call the R script DEG_analysis.r to perform differential gene analysis:the output is the differentially expressed genes result file differential_genes.csv: contains gene ID, logFC, P value and gene expression change status (such as upregulation Up, downregulation Down)<br>
+b.Filter up-regulated or down-regulated genes from the differential_genes.csv file and generate the gene ID file differential_genes_id.txt.<br>
+c.Use the seqkit tool to extract the DNA sequences of differentially expressed genes from the input gene sequence file (FASTA format).<br>
+d.Translate the extracted DNA sequence into a protein sequence，The output is differential_gene_sequence.fastadifferential_gene_sequence.pep, which represent the DNA sequence of the differential gene and the translated protein sequence of the differential gene, respectively.<br>
+Run the following command to automatically execute the above functions：
+```Bash
+snakemake DEG_analysis
+```
 input:./test_sra_data/transcripts_quant/transcript_abundance_quantification_table_filter.csv<br>
 output:./test_sra_data/DEG_result0.05<br>
 (2)snakemake up_regulated_gene

@@ -166,7 +166,7 @@ output：<br>
 	•ko_rich_bar.pdf and ko_rich_dot.pdf：Bar graph and dot plot of KEGG functional enrichment.<br>
 
 
-#### 1. Gene co-expression network
+#### 2. Gene co-expression network
 This flow describes the construction process of the gene co-expression network.<br>
 （1）Correlation analysis: remove classification information and keep ID (1,1) as the name of the sample and species. Samples are used as rows and species are used as columns. Use the Python script correlation_analysis.py to analyze the correlation.<br>
 （2）RMT screening: filter out significant correlation data, extract important structural information, and output an RMT_result.csv file.<br>
@@ -174,7 +174,7 @@ This flow describes the construction process of the gene co-expression network.<
 （4）Meta network analysis: analyze the network connections between different species at different levels and generate a Meta network.<br>
 （5）Subnetwork analysis: analyze the network structure of different samples and groups, extract topological structure features, and generate network information corresponding to each sample.<br>
 （6）Subnetwork analysis of each group: analyze the subnetwork structure corresponding to each group (such as different altitudes, different species, etc.) and draw the network of each group.<br>
-Execute the following command to complete the overall process analysis of the gene co-expression network：<br>
+
 ```Python
   all codes in Gene_co-expression_network.zip
 ```

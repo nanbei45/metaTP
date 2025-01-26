@@ -18,19 +18,20 @@ pip install snakemake
 ## Execute
 Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
 ```Bash
-snakemake --dry-run #不执行任何东西，仅仅展示流程会干什么
+snakemake --dry-run #Does not execute anything, just shows what the process will do
 ```
 <img src="https://github.com/nanbei45/metaTP/blob/master/img/1.png" width="200px"> <br>
-运行以下命令将得到所有分析结果
+Run the following command to get all the analysis results
 ```Bash
-snakemake --cores 4  #最多使用多少个CPU cores/jobs用于并行化。
+snakemake --cores 4  #The maximum number of CPU cores/jobs to use for parallelization.
 ```
-通过运行以下命令，可以查看完整的工作流程图。
+You can view the complete workflow diagram by running the following command.
 ```Python
 snakemake --dag | dot -Tpng > dag.png
 ```
 <img src="https://github.com/nanbei45/metaTP/blob/master/img/dag.png" width="200px"> <br>
-同时，我们总是通过指定命令行中目标文件的名字来执行流程。
+<br>
+At the same time, we can perform the tasks we want in the overall process.
 #### 1. Download the sra sequence according to the ACC number
 The metaTP pipeline integrates data download options using the SRA toolkit.
 ```Bash

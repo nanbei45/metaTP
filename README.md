@@ -20,6 +20,7 @@ Dry run: Use --dry-run to see what tasks Snakemake will perform without actually
 ```Python 
 snakemake --dry-run #不执行任何东西，仅仅展示流程会干什么
 ```
+<img src="https://github.com/nanbei45/metaTP/blob/master/img/dag.png" width="100px">
 运行以下命令将得到所有分析结果
 ```Python
 snakemake --cores 4  #最多使用多少个CPU cores/jobs用于并行化。

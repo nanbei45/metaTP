@@ -33,12 +33,12 @@ snakemake --dag | dot -Tpng > dag.png
 <br>
 At the same time, we can perform the tasks we want in the overall process.
 #### 1. Download the sra sequence according to the ACC number
-The metaTP pipeline integrates data download options using the SRA toolkit.
+The metaTP pipeline integrates data download options using the SRA toolkit, run the following command to implement this function.
 ```Bash
 snakemake prefetch_sra2fastq
 ```
 #### 2. Sequence quality test
-Assess the quality of FASTQ files using FastQC.<br>
+Assess the quality of FASTQ files using FastQC,run the following command to implement this function.<br>
 ```Python
 snakemake QC_test
 ```
@@ -66,7 +66,7 @@ snakemake transcript_index
 ```
 
 #### 5. gene_expression_quant
-This process is to filter out low-expression genes by checking the expression values ​​of each group of samples in the gene expression data table, eliminating genes with low expression levels in the samples, and retaining genes with a certain expression level.<br>
+This process is to filter out low-expression genes by checking the expression values ​​of each group of samples in the gene expression data table, eliminating genes with low expression levels in the samples, and retaining genes with a certain expression level.Run the following command to implement this function<br>
 ```Python
 snakemake gene_expression_quant
 ```
@@ -92,7 +92,7 @@ snakemake DEG_analysis
 snakemake up_regulated_gene
 snakemake down_regulated_gen
 ```
-(1)<br>
+(1)snakemake DEG_analysis<br>
 a.Call the R script DEG_analysis.r to perform differential gene analysis:the output is the differentially expressed genes result file differential_genes.csv: contains gene ID, logFC, P value and gene expression change status (such as upregulation Up, downregulation Down)<br>
 b.Filter up-regulated or down-regulated genes from the differential_genes.csv file and generate the gene ID file differential_genes_id.txt.<br>
 c.Use the seqkit tool to extract the DNA sequences of differentially expressed genes from the input gene sequence file (FASTA format).<br>
@@ -102,7 +102,7 @@ Run the following command to automatically execute the above functions：
 snakemake DEG_analysis
 ```
 
-(2)<br>
+(2)snakemake up_regulated_gene<br>
 a.Screening down-regulated genes: Extracting related gene IDs based on expression change status (Down).<br>
 b.Extract gene sequence: Extract DNA sequence from sequence file based on gene ID.The output is differential_genes_id_down.txt: a list of IDs of downregulated genes.The output is differential_gene_sequence_down.fasta: the DNA sequence of the downregulated gene.<br>
 c.Translate protein sequence: The DNA sequence of the downregulated gene is translated into protein sequence.The output is differential_gene_sequence_down.pep: the protein sequence of the downregulated gene.<br>
@@ -111,7 +111,8 @@ Run the following commands to perform downstream analyses such as gene function 
 snakemake up_regulated_gene
 ```
 
-(3)This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.<br>
+(3)snakemake down_regulated_gen<br>
+This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.<br>
 Run the following commands to perform downstream analyses such as gene function annotation, enrichment analysis, and structure prediction.<br>
 ```Bash
 snakemake down_regulated_gen

@@ -29,7 +29,7 @@ snakemake --cores 4  #最多使用多少个CPU cores/jobs用于并行化。
 ```Python
 snakemake --dag | dot -Tpng > dag.png
 ```
-<img src="https://github.com/nanbei45/metaTP/blob/master/img/dag.png" width="200px">
+<img src="https://github.com/nanbei45/metaTP/blob/master/img/dag.png" width="200px"> <br>
 同时，我们总是通过指定命令行中目标文件的名字来执行流程。
 #### 1. Download the sra sequence according to the ACC number
 The metaTP pipeline integrates data download options using the SRA toolkit.

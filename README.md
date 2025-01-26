@@ -37,15 +37,11 @@ The metaTP pipeline integrates data download options using the SRA toolkit.
 ```Bash
 snakemake prefetch_sra2fastq
 ```
-input: SRR_Acc_List.txt<br>
-output: ./test_sra_data/fastq<br>
 #### 2. Sequence quality test
 Assess the quality of FASTQ files using FastQC.<br>
 ```Python
 snakemake QC_test
 ```
-input: ./test_sra_data/fastq<br>
-output: ./test_sra_data/QC_before_result<br>
 #### 3. Sequence quality control, rmrRNA contig cds
 （1）Quality control (QC_control):<br>
 • Trim the FASTQ file using Trimmomatic, including removing adapters, low-quality sequences, and short sequences.<br>
@@ -62,24 +58,19 @@ Run the following command to complete the above process.<br>
 ```Python
 snakemake QC_rmrRNA_contigs_cds
 ```
-input: ./test_sra_data/fastq<br>
-output: ./test_sra_data/QC_control;./test_sra_data/rmrRNA;./test_sra_data/magahit;<br>
 #### 4. transcript_index
 This is a function for creating transcript indexes, which mainly relies on the salmon tool. Its function is to generate index files for transcript sequences (FASTA format) in RNA-Seq data for subsequent quantitative expression analysis.The output folder will contain the Salmon index files<br>
 Run the following command to complete the function.<br>
 ```Python
 snakemake transcript_index
 ```
-input: ./test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
-output: ./test_sra_data/transcripts_index.<br>
 
 #### 5. gene_expression_quant
 This process is to filter out low-expression genes by checking the expression values ​​of each group of samples in the gene expression data table, eliminating genes with low expression levels in the samples, and retaining genes with a certain expression level.<br>
 ```Python
 snakemake gene_expression_quant
 ```
-input: ./test_sra_data/rmrRNA、./test_sra_data/transcripts_index<br>
-output: ./test_sra_data/transcripts_quant/transcript_abundance_quantification_table.csv<br>
+
 ```bash
      library("tidyverse")
      table_filter<- read.csv("transcript_abundance_quantification_table_filter.csv",header=T,row.names=1)
@@ -93,8 +84,7 @@ output: ./test_sra_data/transcripts_quant/transcript_abundance_quantification_ta
      nrow(S_id)
      write.csv(data.frame(GeneID=rownames(table_filter2),table_filter2),"transcript_abundance_quantification_table_filter2.csv",row.names=F)
 ```
-input:transcript_abundance_quantification_table_filter.csv<br>
-output:transcript_abundance_quantification_table_filter2.csv<br>
+
 #### 6. DEG_analysis
 
 ```Python
@@ -111,8 +101,7 @@ Run the following command to automatically execute the above functions：
 ```Bash
 snakemake DEG_analysis
 ```
-input:./test_sra_data/transcripts_quant/transcript_abundance_quantification_table_filter.csv<br>
-output:./test_sra_data/DEG_result0.05<br>
+
 (2)<br>
 a.Screening down-regulated genes: Extracting related gene IDs based on expression change status (Down).<br>
 b.Extract gene sequence: Extract DNA sequence from sequence file based on gene ID.The output is differential_genes_id_down.txt: a list of IDs of downregulated genes.The output is differential_gene_sequence_down.fasta: the DNA sequence of the downregulated gene.<br>
@@ -121,22 +110,19 @@ Run the following commands to perform downstream analyses such as gene function 
 ```Bash
 snakemake up_regulated_gene
 ```
-input:./test_sra_data/DEG_result0.05、/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta <br>
-output:differential_genes_id_down.txt、differential_gene_sequence_down.fasta、differential_gene_sequence_down.pep.<br>
+
 (3)This process mainly involves extracting the sequences (DNA and protein) of up-regulated genes from the results of differentially expressed gene analysis for subsequent analysis, which is similar to the above steps.<br>
 Run the following commands to perform downstream analyses such as gene function annotation, enrichment analysis, and structure prediction.<br>
 ```Bash
 snakemake down_regulated_gen
 ```
-input:./test_sra_data/DEG_result0.05<br>
-output:/home/mne/metaTP/test_sra_data/megahit/all_longest_orfs_cds_rmdup_id.fasta<br>
+
 #### 7. emapper.py
 The integrated eggNOG -mapper provides several key features including: 1) de novo gene prediction based on raw alignments, 2) integrated pairwise homology prediction, and 3) rapid protein domain detection.<br>
 ```Python
 snakemake emapper
 ```
-input:./test_sra_data/DEG_result0.05/differential_gene_sequence_up.fasta<br>
-output:./test_sra_data/differential_gene_sequence_up<br>
+
 ## Analyze
 We use 8 ontologies and rhizosphere metatranscriptome samples from Mendes et al. as examples for case analysis. The following are the specific steps and input and output of the analysis:
 #### 1. Downstream analysis.R

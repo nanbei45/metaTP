@@ -20,7 +20,7 @@ Dry run: Use --dry-run to see what tasks Snakemake will perform without actually
 ```Python 
 snakemake --dry-run
 ```
-![image](https://github.com/user-attachments/assets/59148488-922d-4457-8233-311e3cb597d4)
+![image](https://github.com/user-attachments/assets/59148488-922d-4457-8233-311e3cb597d4){:height="50%" width="50%"}
 
 
 ```Python

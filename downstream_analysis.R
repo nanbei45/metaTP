@@ -1,5 +1,5 @@
 ###############################################################
-##################过滤掉Streptophyta##########################
+##################Filter out Streptophyta##########################
 ############ df[,-which(names(df)%in%c("a","b")]##############
 ##############################################################
 library("tidyverse")
@@ -26,7 +26,7 @@ library(ggplot2)
 library(dplyr)
 
 gene_dist <- vegdist(t(table_filter2), "bray")
-##分组信息，第一列样本名称，第二列
+##Grouping information, the first column is the sample name
 group<- read.csv("sample_group.csv",header = T,row.names = 1)
 
 res <- pcoa(gene_dist)
@@ -40,7 +40,7 @@ y_value<- res2$values[2,2]
 #> y_value
 #[1] 0.1536484
 
-###合并vectors 与group
+###Merging vectors with groups
 
 vectors_df <- data.frame(sampleID=rownames(vectors),vectors)
 group_df <- data.frame(sampleID=rownames(group),group)
@@ -66,7 +66,7 @@ p<- ggplot(vectors_group, aes(Axis.1,Axis.2)) +
 
 ggsave(p, file="gene_pcoa.pdf", width=9, height=7,device=cairo_pdf)
 
-#组间差异分析
+#Analysis of differences between groups
 library(vegan)
 group1<- vectors_group$group
 anosim(t(table_filter2),group1,permutations = 999, distance = "bray") 
@@ -102,7 +102,7 @@ venn_dat <- read.delim('venn_group.txt', header = T, sep = '\t', stringsAsFactor
 venn_list <- list(venn_dat[,1], venn_dat[,2])
 names(venn_list) <- colnames(venn_dat)
 write.csv(venn_list,"venn_list.csv")
-#作图
+#Plotting
 library(venn)
 pdf("venn_7.pdf",width=9,height=7)
 #png('venn_7.pdf', width = 1500, height = 1500, res = 200, units = 'px')
@@ -112,24 +112,24 @@ dev.off()
 ##############################################
 ##########  functinal annotation   ###############
 ##############################################
-###特异基因功能#############
-#加载dplyr包
+###Specific gene function#############
+#Load the dplyr package
 library(dplyr)
-#直接利用dplyr包里面的intersect函数对数据框取交集
+#Directly use the intersect function in the dplyr package to obtain the intersection of the data frame
 result2=intersect(venn_list$rhizosphere,venn_list$bulk)
-#保存交集结果
+#Save the intersection result
 write.table(file="venn_intersect.txt",result2,quote=F,row.names = F,sep="\t")
-##补集 setdiff(a,b) a与b的补集：setdiff(b,a)
+##Complement setdiff(a,b) The complement of a and b: setdiff(b,a)
 result3=setdiff(venn_list$rhizosphere,venn_list$bulk)
 write.table(file="venn_setdiff_rhi.txt",result3,quote=F,row.names = F,sep="\t")
 result4=setdiff(venn_list$bulk,venn_list$rhizosphere)
 write.table(file="venn_setdiff_bulk.txt",result4,quote=F,row.names = F,sep="\t")
 
-####根据差异基因提取功能注释信息################
+####Extract functional annotation information based on differentially expressed genes################
 
 emapper.annotations_up <- read.csv("differential_gene_sequence_up.emapper.annotations.csv",header = T)
 
-###上调基因###
+###Upregulated genes###
 
 table_filter_up<- table_filter2[which(row.names(table_filter2) %in% emapper.annotations_up["X.query"]),]
 
@@ -215,13 +215,10 @@ pheatmap(x1,color = colorRampPalette(c("blue", "yellow", "red"))(50),
          angle_col="315",
          filename = "DEG_up_heatmap.pdf")
 
-###################################################
-#####################################################
-###对于无参数据可以自己搭建数据库功能富集分析#########
-####################################################
-#####################################################
 
-##根据emapper.annotations提取注释结果######
+###For non-parametric data, you can build your own database for functional enrichment analysis#########
+
+##Extract annotation results according to emapper.annotations######
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install("AnnotationForge")
@@ -242,21 +239,21 @@ emapper <- read.delim("final_table_sequence.emapper.annotations.csv",sep=",") %>
                 GO=GOs,KO=KEGG_ko,Pathway =KEGG_Pathway, 
                 OG=eggNOG_OGs,COG = COG_category,Gene_Name =seed_ortholog)
 
-#####提取eggnog信息######
-#<<<<<<<<<<<<<<<<<<<<获得gene2eggnog<<<<<<<<<<<<<<<<<<<<<<<<
+#####Extracting eggnog information######
+#<<<<<<<<<<<<<<<<<<<<get gene2eggnog<<<<<<<<<<<<<<<<<<<<<<<<
 gene_info <- dplyr::select(emapper,GID,Gene_Name) %>%
   dplyr::filter(!is.na(Gene_Name))
 
-#<<<<<<<<<<<<<<<<<<<<获得gene2go<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<get gene2go<<<<<<<<<<<<<<<<<<<<<<<<
 
 gene2go <- dplyr::select(emapper,GID,GO) %>%
   separate_rows(GO, sep = ',', convert = F) %>%
-  dplyr::filter(GO!="",!is.na(GO))%>%   #这是只提取有GO注释信息的行，判断的标准时GO信息不是NA，这也就是为什么前面必须将“-”替换为NA，不替换就无法进行有效过滤。
-  mutate(EVIDENCE = 'A')     #硬生生加了1列EVIDENCE，全部赋值A,凑数的。
-dim(gene2go)    #查看数据维度。
+  dplyr::filter(GO!="",!is.na(GO))%>%   #This only extracts the rows with GO annotation information. The judgment standard is that the GO information is not NA. This is why the "-" must be replaced with NA in the front. If it is not replaced, effective filtering cannot be performed.
+  mutate(EVIDENCE = 'A')     #I added an EVIDENCE column and assigned all values ​​to A to make up the number.
+dim(gene2go)    #View the data dimensions.
 gene2go<- gene2go[-which(gene2go$GO=="-"),]
 
-#<<<<<<<<<<<<<<<<<<<<获得gene2cog<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<get gene2cog<<<<<<<<<<<<<<<<<<<<<<<<
 
 cog_info <- read_delim("cog_funclass.tab",
                        "\t", escape_double = FALSE, trim_ws = TRUE)
@@ -282,27 +279,26 @@ gene2cog <- gene2cog %>% left_join(cog_info, by = "COG")
 gene2cog<- gene2cog[-which(gene2cog$COG=="-"),]
 gene2cog<- gene2cog[!is.na(gene2cog$COG_Name),]
 
-#<<<<<<<<<<<<<<<<<<<<获得gene2ko<<<<<<<<<<<<<<<<<<<<<<<<
+#<<<<<<<<<<<<<<<<<<<<get gene2ko<<<<<<<<<<<<<<<<<<<<<<<<
 gene2ko<- dplyr::select(emapper,GID,KO) %>%
   separate_rows(KO, sep = ',', convert = F) %>%
   dplyr::filter(!is.na(KO))
 dim(gene2ko)
 
-#提取GID与Pathway信息，这里只有2列信息
-
+#Extract GID and Pathway information, there are only 2 columns of information
 gene2pathway<- dplyr::select(emapper,GID,Pathway) %>%
   separate_rows(Pathway, sep = ',', convert = F) %>%
   dplyr::filter(!is.na(Pathway))
 dim(gene2pathway)
 
 ##########################################
-#至此获得gene_eggnog,gene2go,gene2ko,gene2cog
-####制作自己的Orgdb######################
+#So far, we have obtained gene_eggnog, gene2go, gene2ko, gene2cog
+####Make your own Orgdb######################
 AnnotationForge::makeOrgPackage(gene_info=gene_info,
                                 go=gene2go,
                                 ko=gene2ko,
                                 pathway=gene2pathway,
-                                maintainer='test <test@hormail.com>',#格式最好不要变
+                                maintainer='test <test@hormail.com>',
                                 author='test <test@hormail.com>',
                                 version="0.1" ,
                                 outputDir=".", 
@@ -310,7 +306,7 @@ AnnotationForge::makeOrgPackage(gene_info=gene_info,
                                 genus="M",
                                 species="y",
                                 goTable="go")
-##重启.rs.restartR()
+##Restart.rs.restart()
 # R CMD build org.My.eg.db
 dir.create("R_library")
 install.packages("org.My.eg.db", repos = NULL, lib = "R_library",type = "source")
@@ -417,7 +413,7 @@ p <- ggplot(data = gene2cog) +
 ggsave("cog.pdf", p, width = 16, height = 7)
 
 ##########################################################
-################ GO 富集分析##############################
+################GO enrichment analysis####################
 ##########################################################
 
 library(tidyverse)
@@ -455,14 +451,12 @@ ggsave(p2, file=paste('go_rich_dot.pdf',sep =""), width=8, height=6)
 #cat("  
 
 ###################################################
-#####################KO富集#######################
+#####################KO Tomishu####################
 
 ###pathway2name
 
 ##################STEP4-2: 得到pathway2name, ko2pathway##########################
-# 需要下载 json文件(这是是经常更新的)
 # https://www.genome.jp/kegg-bin/get_htext?ko00001
-# 代码来自：http://www.genek.tv/course/225/task/4861/show
 if(F){
   library(jsonlite)
   library(purrr)

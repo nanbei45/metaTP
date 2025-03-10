@@ -27,6 +27,10 @@ rule prefetch_sra2fastq:
         fastq = f"{fastq_dir}/{{sra}}.fastq"
     params:
         sra_id = lambda wildcards: samples_df[samples_df["sra"] == wildcards.sra]["sra"].iloc[0]
+    resources:
+        mem=8,      
+        time="02:00:00" 
+    threads: 4     
     shell:
         """
         prefetch {params.sra_id} && \
@@ -41,6 +45,10 @@ rule QC_test:
         fastq = f"{fastq_dir}/{{sra}}.fastq.gz"
     output:
         qc_report = directory(f"{qc_dir}/{{sra}}_qc")
+    resources:
+        mem=4,      
+        time="01:00:00"  
+    threads: 2     
     shell:
         "python scripts/2.QC_test.py -i {input.fastq} -o {output.qc_report}"
 
@@ -51,6 +59,10 @@ rule QC_rmrRNA_contigs_cds:
     output:
         rmrna = directory(f"{qc_dir}/{{sra}}_rmrRNA"),
         contigs = directory(f"{qc_dir}/{{sra}}_contigs")
+    resources:
+        mem=32,     
+        time="06:00:00"  
+    threads: 8      
     shell:
         "python scripts/3.QC_rmrRNA_contigs_cds.py -i {input.fastq} -o {output.rmrna} {output.contigs}"
 
@@ -60,6 +72,10 @@ rule transcript_index:
         contigs = f"{qc_dir}/{{sra}}_contigs/contigs.fasta"
     output:
         index = directory(f"{quant_dir}/{{sra}}_index")
+    resources:
+        mem=64,     
+        time="08:00:00"  
+    threads: 16   
     shell:
         "salmon index -t {input.contigs} -i {output.index}"
 
@@ -72,6 +88,10 @@ rule gene_expression_quant:
         quant = directory(f"{quant_dir}/{{sra}}_quant")
     params:
         threads = config["threads"]
+    resources:
+        mem=64,     
+        time="12:00:00"  
+    threads: 16     
     shell:
         "salmon quant -i {input.index} -l A -r {input.fastq} -o {output.quant} --threads {params.threads}"
 
@@ -85,6 +105,10 @@ rule DEG_analysis:
     params:
         pvalue = config["pvalue"],
         fold_change = config["fold_change"]
+    resources:
+        mem=16,    
+        time="06:00:00"  
+    threads: 4    
     shell:
         "python scripts/6.DEG_analysis.py -i {input.quant_dirs} -g {input.groups} -o {output.deg_results} -p {params.pvalue} -f {params.fold_change}"
 
@@ -97,5 +121,9 @@ rule emapper:
     params:
         eggnog_db = config["eggnog_db"],
         threads = config["threads"]
+    resources:
+        mem=32,    
+        time="24:00:00"  
+    threads: 8      
     shell:
         "emapper.py -i {input.deg_genes} -o {output.emapper_out} --data_dir {params.eggnog_db} --cpu {params.threads} -m diamond"

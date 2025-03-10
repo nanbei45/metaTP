@@ -70,6 +70,14 @@ Run the following command to get all the analysis results
 ```Bash
 snakemake --cores 4  #The maximum number of CPU cores/jobs to use for parallelization.
 ```
+集群执行
+默认情况下，Snakemake 在调用它的本地计算机上执行作业。 或者，它可以在分布式环境中执行作业，例如计算集群或批处理系统。 如果节点共享公共文件系统，Snakemake 支持三种替代执行模式。在集群环境中，计算作业通常通过 qsub 等命令作为 shell 脚本提交。 Snakemake 提供了在此类集群上执行的通用模式。这个在服务器上用来分配运行资源设置运行程序
+```Python
+snakemake --cluster qsub --jobs 100 #--jobs将并发提交的作业数量限制为 100
+snakemake --cluster-sync "qsub -sync yes" --jobs 100 #--cluster-sync保证job按顺序执行，每个job的执行都会等待上一个完成后再继续执行下一个作业
+nakemake --cluster "qsub -pe threaded {threads}" --jobs 100 #可以在大括号中访问已使用的线程数，类似于 shell 命令的格式
+snakemake --drmaa --jobs 100 #或者可以使用分布式资源管理应用程序 API (DRMAA)
+```
 You can view the complete workflow diagram by running the following command.
 ```Python
 snakemake --dag | dot -Tpng > dag.png

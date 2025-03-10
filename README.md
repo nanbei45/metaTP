@@ -4,7 +4,7 @@ metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that in
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14998528.svg)](https://zenodo.org/records/14998528)
 ## Citations
 ### Version Control
-The code for this study has been archived with Zenodo, DOI [10.5281/zenod0.14998528](https://zenodo.org/records/14998528).
+The code for this study has been archived with Zenodo, DOI [10.5281/zenod0.14998528](https://zenodo.org/records/14998528).<br>
 **Manuscript version**: v1.0.1([link](https://zenodo.org/records/14998528))。
 
 ## Prerequisites

@@ -1,5 +1,11 @@
 # metaTP
 metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that integrated bioinformatics tools for analyzing metatranscriptomic data comprehensively.It includes quality control, non-coding RNA removal, transcript expression quantification, differential gene expression analysis, functional annotation, co-expression network analysis.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14997338.svg)](https://zenodo.org/records/14997338)
+## 引用
+### 版本控制
+本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.14997338](https://zenodo.org/records/14997338)。  
+**稿件使用版本**: v1.0.0([永久链接](https://zenodo.org/records/14997338))。
+
 ## Prerequisites
 Download metaTP project
 ```Python
@@ -74,7 +80,6 @@ default-resources:
  ```Bash
 # 使用 --profile 指定集群配置，--jobs 控制最大并发任务数
 snakemake --profile config/cluster --jobs 100
-<br>
 ```
 You can view the complete workflow diagram by running the following command.
 ```Python
@@ -224,11 +229,6 @@ This flow describes the construction process of the gene co-expression network.<
 ```Python
   all codes in Gene_co-expression_network.zip
 ```
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14997338.svg)](https://zenodo.org/records/14997338)
-## 引用
-### 版本控制
-本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.14997338](https://zenodo.org/records/14997338)。  
-**稿件使用版本**: v1.0.0([永久链接](https://zenodo.org/records/14997338))。
 
 
 

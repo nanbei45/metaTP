@@ -15,10 +15,50 @@ Install snakemake
 conda activate metaTP
 pip install snakemake
 ```
-用户需要将samplesheet.csv文件中的数据替换为自己的数据，只需提供sra_id号，管道会自动进行下载。
-用户可以修改config.yaml 文件中的参数，比如输出输入路径、输出目录、数据库位置及分析参数。
-'''python
+用户需要将samplesheet.csv文件中的数据替换为自己的数据(只需提供sra_id号，管道会自动进行下)），样本元数据表格式如下：
+'''Bash
+# samplesheet.csv
+sample,sra
+sample1,SRR22411016
+sample2,SRR22411017
+...
+'''
+sample: 样本唯一名称
+sra: SRA 编号（流程自动下载）
 
+修改 config/config.yaml 以自定义分析参数：
+'''Bash
+#输入输出配置
+samplesheet: "samplesheet.csv"   # 样本表路径
+output_dir: "results"            # 输出根目录
+fastq_dir: "{output_dir}/fastq"  # 原始 FASTQ 文件目录
+qc_dir: "{output_dir}/qc"        # 质量控制结果
+quant_dir: "{output_dir}/quant"  # 定量结果
+deg_dir: "{output_dir}/deg"      # 差异表达结果
+emapper_dir: "{output_dir}/emapper"  # 功能注释结果
+#分析参数
+threads: 24       # 并行线程数
+pvalue: 0.05      # 差异分析显著性阈值
+fold_change: 1    # 差异倍数阈值
+#数据库路径
+eggnog_db: "/path/to/eggnog-mapper_database"      # eggNOG-mapper 数据库目录
+dmnd_db: "/path/to/eggnog_proteins.dmnd"          # DIAMOND 数据库路径
+'''
+注意：需提前下载并配置 eggNOG-mapper 数据库[参考文档](https://github.com/eggnogdb/eggnog-mapper/wiki)。
+
+集群支持（SLURM 示例）
+创建 config/cluster/slurm.yaml：
+'''Bash
+jobs: 50
+cluster: "sbatch --mem {resources.mem} --cpus-per-task {resources.threads} --time {resources.time}"
+default-resources:
+    mem: "16G"
+    threads: 4
+    time: "24:00:00"
+'''
+提交任务：
+'''Bash
+snakemake --profile config/cluster/slurm --jobs 50
 '''
 ## Execute
 Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:

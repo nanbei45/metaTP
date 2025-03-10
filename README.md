@@ -56,27 +56,7 @@ Run the following command to get all the analysis results
 ```Bash
 snakemake --cores 4  #The maximum number of CPU cores/jobs to use for parallelization.
 ```
-集群执行
-Snakemake可以在分布式环境中运行，比如集群。如果节点共享公共文件系统，Snakemake提供三种替代执行模式：
-1、在集群环境中，任务通常通过shell脚本的方式qsub提交到节点上：
-```Python
-snakemake --cluster qsub --jobs 100
-```
-每个任务被编译成一个shell脚本，这里通过qsub提交。--jobs限制了并行提交的作业数量，这个基本的模式假设提交命令在提交完作业后立刻返回。
-2、有些集群允许以同步模式运行提交命令，即等待作业执行完毕。在这种情况下，我们可以调用例如：
-```Python
-snakemake --cluster-sync "qsub -sync yes" --jobs 100
-```
-指定的提交命令也可以使用从提交作业中获取的其他参数进行修饰。例如，可以使用大括号访问已使用线程的数量，类似于shell命令的格式化，例如。
-```Python
-snakemake --cluster "qsub -pe threaded {threads}" --jobs 100
-```
-3、另外，snake也可以使用分布式资源管理应用程序API (DRMAA)。该API提供了一个公共接口来控制各种资源管理系统。DRMAA支持可以通过如下调用snake来激活:
-```Python
-snakemake --drmaa --jobs 100
-```
-如果可用，DRMAA比一般集群模式更好，因为它提供了更好的控制和错误处理。其他用于特定集群的参数，可以通过工作流的profile(参考Profiles部分)来补充Snakefile。
-
+本流程可通过 Snakemake 的集群模式 适配 PBS/Torque、SGE 等集群系统，支持动态资源分配和作业调度。详细配置流程可参考[官方文档](https://snakemake.github.io/snakemake-plugin-catalog/)
 You can view the complete workflow diagram by running the following command.
 ```Python
 snakemake --dag | dot -Tpng > dag.png

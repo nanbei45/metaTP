@@ -1,11 +1,11 @@
 # metaTP
 metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that integrated bioinformatics tools for analyzing metatranscriptomic data comprehensively.It includes quality control, non-coding RNA removal, transcript expression quantification, differential gene expression analysis, functional annotation, co-expression network analysis.<br>
 <br>
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14997338.svg)](https://zenodo.org/records/14997338)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14998528.svg)](https://zenodo.org/records/14998528)
 ## Citations
 ### Version Control
-The code for this study has been archived with Zenodo, DOI [10.5281/zenodo.14997338](https://zenodo.org/records/14997338).
-**Manuscript version**: v1.0.1([link](https://zenodo.org/records/14997338))。
+The code for this study has been archived with Zenodo, DOI [10.5281/zenod0.14998528](https://zenodo.org/records/14998528).
+**Manuscript version**: v1.0.1([link](https://zenodo.org/records/14998528))。
 
 ## Prerequisites
 Download metaTP project

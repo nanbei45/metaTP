@@ -15,6 +15,11 @@ Install snakemake
 conda activate metaTP
 pip install snakemake
 ```
+用户需要将samplesheet.csv文件中的数据替换为自己的数据，只需提供sra_id号，管道会自动进行下载。
+用户可以修改config.yaml 文件中的参数，比如输出输入路径、输出目录、数据库位置及分析参数。
+'''python
+
+'''
 ## Execute
 Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
 ```Bash

@@ -64,8 +64,8 @@ def salmon_quant(input,index,threads,output):
 def sort_key(s):
     #sort_strings_with_embedded_numbers
     re_digits = re.compile(r'(\d+)')
-    pieces = re_digits.split(s)  # 切成数字与非数字
-    pieces[1::2] = map(int, pieces[1::2])  # 将数字部分转成整数
+    pieces = re_digits.split(s)  # Cut into numbers and non-numbers
+    pieces[1::2] = map(int, pieces[1::2])  # Convert the numeric part to an integer
     return pieces
 def merge_tables (output):
     files = os.listdir(output + "/transcripts_quant")

@@ -173,11 +173,11 @@ This flow describes the construction process of the gene co-expression network.<
 ```Python
   all codes in Gene_co-expression_network.zip
 ```
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234567.svg)](https://doi.org/10.5281/zenodo.1234567)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14997338.svg)](https://zenodo.org/records/14997338)
 ## 引用
 ### 版本控制
-本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.1234567](https://doi.org/10.5281/zenodo.1234567)。  
-**稿件使用版本**: v1.0.0 ([永久链接](https://zenodo.org/record/1234567))。
+本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.14997338](https://zenodo.org/records/14997338)。  
+**稿件使用版本**: v1.0.0 (https://zenodo.org/records/14997338)。
 
 ### BibTeX 格式
 ```bibtex

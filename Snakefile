@@ -3,7 +3,6 @@ import pandas as pd
 # Loading a Configuration File
 configfile: "config/config.yaml"
 
-# 解析 samplesheet.csv
 samples_df = pd.read_csv(config["samplesheet"])
 SAMPLES = samples_df["sample"].tolist()
 SRAS = samples_df["sra"].tolist()

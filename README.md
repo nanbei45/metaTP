@@ -56,7 +56,26 @@ Run the following command to get all the analysis results
 ```Bash
 snakemake --cores 4  #The maximum number of CPU cores/jobs to use for parallelization.
 ```
-本流程可通过 Snakemake 的集群模式 适配 PBS/Torque、SGE 等集群系统，支持动态资源分配和作业调度。详细配置流程可参考[官方文档](https://snakemake.github.io/snakemake-plugin-catalog/)
+本流程可通过 Snakemake 的集群模式 适配 PBS/Torque、SGE 等集群系统，支持动态资源分配和作业调度。<br>
+根据您的集群类型，修改config/cluster.yaml文件中的cluster字段
+```yaml
+cluster: "sbatch --mem {resources.mem}G --cpus-per-task {threads} --time {resources.time} --output slurm_logs/%j.out --error slurm_logs/%j.err"
+default-resources:
+  mem: 16
+  time: "04:00:00"
+  threads: 4
+```
+关键参数说明<br>
+• {resources.mem}：任务内存需求（单位：GB）。<br>
+• {resources.time}：任务最大运行时间（格式：HH:MM:SS）。<br>
+• {threads}：任务请求的 CPU 核心数。<br>
+• --output/--error 或 -o/-e：作业日志输出目录（需提前创建，如 slurm_logs）。<br>
+ 提交作业到集群<br>
+ ```Bash
+# 使用 --profile 指定集群配置，--jobs 控制最大并发任务数
+snakemake --profile config/cluster --jobs 100
+<br>
+```
 You can view the complete workflow diagram by running the following command.
 ```Python
 snakemake --dag | dot -Tpng > dag.png

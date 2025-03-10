@@ -1,0 +1,5 @@
+cluster: "sbatch --mem {resources.mem}G --cpus-per-task {threads} --time {resources.time} --output slurm_logs/%j.out --error slurm_logs/%j.err"
+default-resources:
+  mem: 16
+  time: "04:00:00"
+  threads: 4

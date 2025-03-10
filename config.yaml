@@ -3,3 +3,21 @@ phred: "-phred33"
 adapter_path: "trimmomatic_adapters/TruSeq3"
 quality_cutoff: "4:15"
 min_len: 25
+
+# Input and output configuration
+samplesheet: "samplesheet.csv"
+output_dir: "results"
+fastq_dir: "{output_dir}/fastq"
+qc_dir: "{output_dir}/qc"
+quant_dir: "{output_dir}/quant"
+deg_dir: "{output_dir}/deg"
+emapper_dir: "{output_dir}/emapper"
+
+# Analysis parameters
+threads: 24
+pvalue: 0.05
+fold_change: 1
+
+# Database path
+eggnog_db: "/home/mne/metaTP/eggnog-mapper_database"
+dmnd_db: "/home/mne/metaTP/eggnog-mapper_database/eggnog_proteins.dmnd"

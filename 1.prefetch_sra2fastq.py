@@ -48,7 +48,7 @@ def create_Folder(filename):
 #########################################################################3
 def prefetch_sra(inputfile,outfile):
     create_Folder(outfile)
-    with open(inputfile, "r", encoding='utf-8') as f:  # 打开文本
+    with open(inputfile, "r", encoding='utf-8') as f:  # Open Text
         for sra_acc in f.readlines():
             sra_acc = sra_acc.strip('\n')
             cmd1 = "prefetch " + sra_acc + ' --max-size 200G --output-directory ' + outfile
@@ -57,7 +57,7 @@ def prefetch_sra(inputfile,outfile):
 ###################################################################################
 def sra2fastq(inputfile,outfile):
     create_Folder('./' + outfile + '/fastq')
-    with open(inputfile, "r", encoding='utf-8') as f:  # 打开文本
+    with open(inputfile, "r", encoding='utf-8') as f:  # Open Text
         for sra_acc in f.readlines():
             sra_acc = sra_acc.strip('\n')
             os.system("parallel-fastq-dump --sra-id " + sra_acc + " --threads 24 --outdir " + './' + outfile + '/fastq' + " --split-3 --gzip")

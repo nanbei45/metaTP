@@ -177,19 +177,7 @@ This flow describes the construction process of the gene co-expression network.<
 ## 引用
 ### 版本控制
 本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.14997338](https://zenodo.org/records/14997338)。  
-**稿件使用版本**: v1.0.0 (https://zenodo.org/records/14997338)。
+**稿件使用版本**: v1.0.0((https://zenodo.org/records/14997338))。
 
-### BibTeX 格式
-```bibtex
-@software{Author_metaTP_2023,
-  author       = {Zhang, Wei and Li, Hao},
-  title        = {metaTP: Snakemake Pipeline for Metatranscriptomics Analysis},
-  month        = dec,
-  year         = 2023,
-  publisher    = {Zenodo},
-  version      = {v1.0.0},
-  doi          = {10.5281/zenodo.1234567},
-  url          = {https://doi.org/10.5281/zenodo.1234567}
-}
 
 

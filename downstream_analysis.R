@@ -434,7 +434,7 @@ gene_list <- read.delim("differential_genes_id_up.txt",header=T,stringsAsFactors
 names(gene_list) <- c('gene_id') 
 gene_select <- gene_list$gene_id  
 
-#Go富集分析 
+#Go enrichment analysis
 #cat("         >> go_rich analysis starting...", fill=TRUE)
 #cat("", fill = TRUE)
 go_rich <- enricher(gene = gene_select,
@@ -455,7 +455,7 @@ ggsave(p2, file=paste('go_rich_dot.pdf',sep =""), width=8, height=6)
 
 ###pathway2name
 
-##################STEP4-2: 得到pathway2name, ko2pathway##########################
+##################STEP4-2: get the pathway2name, ko2pathway##########################
 # https://www.genome.jp/kegg-bin/get_htext?ko00001
 if(F){
   library(jsonlite)

@@ -1,5 +1,5 @@
-#### 初步过滤低表达基因 ####
-##过滤掉每组中至少一半的样品大于1的行
+#### Preliminary filtering of low-expression genes ####
+##Filter out rows where at least half of the samples in each group are greater than 1
 
 counts <- read.csv("./test_sra_data/transcripts_quant/transcript_abundance_quantification_table.csv",header=T,row.names=1)
 

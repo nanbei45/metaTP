@@ -1,10 +1,11 @@
 # metaTP
 metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that integrated bioinformatics tools for analyzing metatranscriptomic data comprehensively.It includes quality control, non-coding RNA removal, transcript expression quantification, differential gene expression analysis, functional annotation, co-expression network analysis.<br>
+<br>
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14997338.svg)](https://zenodo.org/records/14997338)
-## 引用
-### 版本控制
-本研究代码已通过 Zenodo 存档，DOI 为 [10.5281/zenodo.14997338](https://zenodo.org/records/14997338)。  
-**稿件使用版本**: v1.0.0([永久链接](https://zenodo.org/records/14997338))。
+## Citations
+### Version Control
+The code for this study has been archived with Zenodo, DOI [10.5281/zenodo.14997338](https://zenodo.org/records/14997338).
+**Manuscript version**: v1.0.0([link](https://zenodo.org/records/14997338))。
 
 ## Prerequisites
 Download metaTP project
@@ -21,7 +22,7 @@ Install snakemake
 conda activate metaTP
 pip install snakemake
 ```
-用户需要将samplesheet.csv文件中的数据替换为自己的数据(只需提供sra_id号，管道会自动进行下)），样本元数据表格式如下：
+Users need to replace the data in the samplesheet.csv file with their own data. The sample metadata table format is as follows:
 ```Bash
 # samplesheet.csv
 sample,sra
@@ -29,28 +30,28 @@ sample1,SRR22411016
 sample2,SRR22411017
 ...
 ```
-sample: 样本唯一名称
-sra: SRA 编号（流程自动下载）
+sample: sample unique name
+sra: SRA number (automatic download of the process)
 
-修改 config/config.yaml 以自定义分析参数：
+Modify config/config.yaml to customize the analysis parameters:
 ```Bash
-#输入输出配置
-samplesheet: "samplesheet.csv"   # 样本表路径
-output_dir: "results"            # 输出根目录
-fastq_dir: "{output_dir}/fastq"  # 原始 FASTQ 文件目录
-qc_dir: "{output_dir}/qc"        # 质量控制结果
-quant_dir: "{output_dir}/quant"  # 定量结果
-deg_dir: "{output_dir}/deg"      # 差异表达结果
-emapper_dir: "{output_dir}/emapper"  # 功能注释结果
-#分析参数
-threads: 24       # 并行线程数
-pvalue: 0.05      # 差异分析显著性阈值
-fold_change: 1    # 差异倍数阈值
-#数据库路径
-eggnog_db: "/path/to/eggnog-mapper_database"      # eggNOG-mapper 数据库目录
-dmnd_db: "/path/to/eggnog_proteins.dmnd"          # DIAMOND 数据库路径
+# Input and output configuration
+samplesheet: "samplesheet.csv" # Sample sheet path
+output_dir: "results" # Output root directory
+fastq_dir: "{output_dir}/fastq" # Original FASTQ file directory
+qc_dir: "{output_dir}/qc" # Quality control results
+quant_dir: "{output_dir}/quant" # Quantitative results
+deg_dir: "{output_dir}/deg" # Differential expression results
+emapper_dir: "{output_dir}/emapper" # Functional annotation results
+#Analysis parameters
+threads: 24 # Number of parallel threads
+pvalue: 0.05 # Significant threshold for differential analysis
+fold_change: 1 # Fold change threshold
+#Database path
+eggnog_db: "/path/to/eggnog-mapper_database" # eggNOG-mapper database directory
+dmnd_db: "/path/to/eggnog_proteins.dmnd" # DIAMOND database path
 ```
-注意：需提前下载并配置 eggNOG-mapper 数据库[参考文档](https://github.com/eggnogdb/eggnog-mapper/wiki)。
+Note: You need to download and configure the eggNOG-mapper database in advance [reference documentation](https://github.com/eggnogdb/eggnog-mapper/wiki).
 
 ## Execute
 Dry run: Use --dry-run to see what tasks Snakemake will perform without actually running them:
@@ -62,8 +63,8 @@ Run the following command to get all the analysis results
 ```Bash
 snakemake --cores 4  #The maximum number of CPU cores/jobs to use for parallelization.
 ```
-本流程可通过 Snakemake 的集群模式 适配 PBS/Torque、SGE 等集群系统，支持动态资源分配和作业调度。<br>
-根据您的集群类型，修改config/cluster.yaml文件中的cluster字段
+This process can be adapted to cluster systems such as PBS/Torque and SGE through Snakemake's cluster mode, supporting dynamic resource allocation and job scheduling. <br>
+According to your cluster type, modify the cluster field in the config/cluster.yaml file
 ```yaml
 cluster: "sbatch --mem {resources.mem}G --cpus-per-task {threads} --time {resources.time} --output slurm_logs/%j.out --error slurm_logs/%j.err"
 default-resources:
@@ -71,14 +72,14 @@ default-resources:
   time: "04:00:00"
   threads: 4
 ```
-关键参数说明<br>
-• {resources.mem}：任务内存需求（单位：GB）。<br>
-• {resources.time}：任务最大运行时间（格式：HH:MM:SS）。<br>
-• {threads}：任务请求的 CPU 核心数。<br>
-• --output/--error 或 -o/-e：作业日志输出目录（需提前创建，如 slurm_logs）。<br>
- 提交作业到集群<br>
+Key parameter description<br>
+• {resources.mem}: Task memory requirement (unit: GB). <br>
+• {resources.time}: Maximum task running time (format: HH:MM:SS). <br>
+• {threads}: Number of CPU cores requested by the task. <br>
+• --output/--error or -o/-e: Job log output directory (needs to be created in advance, such as slurm_logs). <br>
+Submit the job to the cluster<br>
  ```Bash
-# 使用 --profile 指定集群配置，--jobs 控制最大并发任务数
+# Use --profile to specify cluster configuration and --jobs to control the maximum number of concurrent tasks
 snakemake --profile config/cluster --jobs 100
 ```
 You can view the complete workflow diagram by running the following command.

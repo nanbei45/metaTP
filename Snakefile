@@ -1,107 +1,102 @@
+import pandas as pd
+
+# Loading a Configuration File
+configfile: "config/config.yaml"
+
+# 解析 samplesheet.csv
+samples_df = pd.read_csv(config["samplesheet"])
+SAMPLES = samples_df["sample"].tolist()
+SRAS = samples_df["sra"].tolist()
+
+# Defining dynamic output paths
+output_dir = config["output_dir"]
+fastq_dir = config["fastq_dir"]
+qc_dir = config["qc_dir"]
+quant_dir = config["quant_dir"]
+deg_dir = config["deg_dir"]
+emapper_dir = config["emapper_dir"]
+
+#Global rules: define all target outputs
 rule all:
     input:
-        "./test_sra_data/differential_gene_sequence_up",
-        "./test_sra_data/up_regulated_gene",
-        "./test_sra_data/down_regulated_gene"
+        expand(f"{deg_dir}/{{sample}}_deg_results", sample=SAMPLES),
+        expand(f"{emapper_dir}/{{sample}}_emapper", sample=SAMPLES)
 
-# 规则 1: 下载并转换 SRA 到 FASTQ
+# Rule 1: Download SRA data and convert to FASTQ
 rule prefetch_sra2fastq:
-    input:
-        sra_list="SRR_Acc_List.txt"
     output:
-        fastq_list=directory("./test_sra_data/fastq")
+        fastq = f"{fastq_dir}/{{sra}}.fastq"
+    params:
+        sra_id = lambda wildcards: samples_df[samples_df["sra"] == wildcards.sra]["sra"].iloc[0]
     shell:
-        "python 1.prefetch_sra2fastq.py -i {input} -o {output}"
+        """
+        prefetch {params.sra_id} && \
+        fastq-dump {params.sra_id} \
+            --outdir {fastq_dir} \
+            --gzip
+        """
 
-# 规则 2: 质量控制
+# Rule 2: Quality Control
 rule QC_test:
     input:
-        fastq_list=rules.prefetch_sra2fastq.output.fastq_list # 引用规则1的输出
+        fastq = f"{fastq_dir}/{{sra}}.fastq.gz"
     output:
-        qc_result=directory("./test_sra_data/QC_before_result")
-
+        qc_report = directory(f"{qc_dir}/{{sra}}_qc")
     shell:
-        "python 2.QC_test.py -i {input} -o {output}"
+        "python scripts/2.QC_test.py -i {input.fastq} -o {output.qc_report}"
 
-# 规则 3: 运行 QC_rmrRNA_contigs_cds.py
+# Rule 3: Remove rRNA and assemble contigs
 rule QC_rmrRNA_contigs_cds:
     input:
-        fastq_dir=rules.prefetch_sra2fastq.output.fastq_list
+        fastq = f"{qc_dir}/{{sra}}_qc/clean.fastq.gz"
     output:
-        QC_control=directory("./test_sra_data/QC_control"),
-        rmrRNA = directory("./test_sra_data/rmrRNA"),
-        megahit = directory("./test_sra_data/megahit")
-
+        rmrna = directory(f"{qc_dir}/{{sra}}_rmrRNA"),
+        contigs = directory(f"{qc_dir}/{{sra}}_contigs")
     shell:
-        "python 3.QC_rmrRNA_contigs_cds.py -i {input.fastq_dir} -o {output.QC_control} {output.rmrRNA} {output.megahit}"
+        "python scripts/3.QC_rmrRNA_contigs_cds.py -i {input.fastq} -o {output.rmrna} {output.contigs}"
 
-# 规则 4: 运行 transcript_index.py
+# Rule 4: Transcript Indexing
 rule transcript_index:
     input:
-        fasta_file=rules.QC_rmrRNA_contigs_cds.output.megahit
+        contigs = f"{qc_dir}/{{sra}}_contigs/contigs.fasta"
     output:
-        index_dir=directory("./test_sra_data/transcripts_index"),
+        index = directory(f"{quant_dir}/{{sra}}_index")
     shell:
-        "python 4.transcript_index.py -i {input.fasta_file} -o {output.index_dir}"
+        "salmon index -t {input.contigs} -i {output.index}"
 
-# 规则 5: 运行 gene_expression_quant.py
+# Rule 5: Quantification of gene expression
 rule gene_expression_quant:
     input:
-        fastq_dir=rules.QC_rmrRNA_contigs_cds.output.rmrRNA,
-        index_dir=rules.transcript_index.output.index_dir
+        fastq = f"{qc_dir}/{{sra}}_rmrRNA/clean.fastq.gz",
+        index = f"{quant_dir}/{{sra}}_index"
     output:
-        quant_file= directory("./test_sra_data/transcripts_quant")
+        quant = directory(f"{quant_dir}/{{sra}}_quant")
     params:
-        p=24
+        threads = config["threads"]
     shell:
-        "python 5.gene_expression_quant.py -i {input.fastq_dir} - index {input.index_dir} -p {params.p} -o {output.quant_file}"
+        "salmon quant -i {input.index} -l A -r {input.fastq} -o {output.quant} --threads {params.threads}"
 
-# 规则 6: 运行 DEG_analysis.py
+# Rule 6: Differential Expression Analysis
 rule DEG_analysis:
     input:
-        quant_file=rules.gene_expression_quant.output,
-        sample_group = "sample_group.txt",
-        bulk = "rhizosphere/bulk",
-        megahit = rules.QC_rmrRNA_contigs_cds.output.megahit
+        quant_dirs = expand(f"{quant_dir}/{{sra}}_quant", sra=SRAS),
+        groups = lambda wildcards: samples_df[samples_df["sample"] == wildcards.sample]["group"].iloc[0]
     output:
-        deg_result= directory("./test_sra_data/DEG_result0.05")
+        deg_results = directory(f"{deg_dir}/{{sample}}_deg_results")
     params:
-        pvalue=0.05, fold_change=1
+        pvalue = config["pvalue"],
+        fold_change = config["fold_change"]
     shell:
-        "python 6.DEG_analysis.py -i {input.quant_file} -g {input.sample_group} -n {input.bulk} -s {input.megahit} -o {output.deg_result} -p {params.pvalue} -f {params.fold_change}"
+        "python scripts/6.DEG_analysis.py -i {input.quant_dirs} -g {input.groups} -o {output.deg_results} -p {params.pvalue} -f {params.fold_change}"
 
-# 规则 7: 运行 up_regulated_gene.py
-rule up_regulated_gene:
-    input:
-        deg_result=rules.DEG_analysis.output.deg_result,
-        megahit= rules.QC_rmrRNA_contigs_cds.output.megahit
-    output:
-        up_genes=directory("./test_sra_data/up_regulated_gene")
-    shell:
-        "python 6.up_regulated_gene.py -i {input.deg_result} -s {input.megahit} -o {output.up_genes}"
-
-# 规则 8: 运行 down_regulated_gene.py
-rule down_regulated_gene:
-    input:
-        deg_result=rules.DEG_analysis.output.deg_result,
-        megahit= rules.QC_rmrRNA_contigs_cds.output.megahit
-    output:
-        down_genes=directory("./test_sra_data/down_regulated_gene")
-    shell:
-        "python 6.down_regulated_gene.py -i {input.deg_result} -s {input.megahit} -o {output.down_genes}"
-
-# 规则 9: 运行 emapper.py
+# Rule 7: Functional Annotation (emapper)
 rule emapper:
     input:
-        up_gnene = rules.DEG_analysis.output.deg_result
+        deg_genes = f"{deg_dir}/{{sample}}_deg_results/upregulated_genes.fasta"
     output:
-        emapper_output=directory("./test_sra_data/differential_gene_sequence_up")
+        emapper_out = directory(f"{emapper_dir}/{{sample}}_emapper")
     params:
-        cpu=20,
-        eggnog_db="/home/mne/metaTP/eggnog-mapper_database",
-        dmnd_db="/home/mne/metaTP/eggnog-mapper_database/eggnog_proteins.dmnd"
+        eggnog_db = config["eggnog_db"],
+        threads = config["threads"]
     shell:
-        "emapper.py -m diamond -i {input.up_genes} --itype CDS --translate --cpu {params.cpu} --data_dir {params.eggnog_db} --dmnd_db {params.dmnd_db} -o {output.emapper_output} --block_size 0.4 --override"
-
-
-
+        "emapper.py -i {input.deg_genes} -o {output.emapper_out} --data_dir {params.eggnog_db} --cpu {params.threads} -m diamond"

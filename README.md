@@ -165,6 +165,5 @@ metaTP: a pipeline for analyzing meta-transcriptome.metaTP is a pipeline that in
       all codes in Gene_co-expression_network.zip
  
 ## **If you use metaTP, please cite:** 
-    (1) metaTP: a pipeline for analyzing meta-transcriptome
-    (2) Yansu Wang, Murong Zhou, Quan Zou, Lei Xu. Machine learning for phytopathology: from the molecular scale towards the network scale. Briefings in Bioinformatics. 2021, Doi: 10.1093/bib/bbab037
+    He, L., Zou, Q. & Wang, Y. metaTP: a meta-transcriptome data analysis pipeline with integrated automated workflows. BMC Bioinformatics 26, 111 (2025).
    
